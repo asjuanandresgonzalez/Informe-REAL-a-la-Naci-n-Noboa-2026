@@ -44,6 +44,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif;line-height:1.15;color:var(--wh
   background:var(--red);padding:8px 0;overflow:hidden;
   position:fixed;top:0;left:0;right:0;z-index:1001;
   border-bottom:1px solid rgba(255,255,255,.15);
+  height:28px;
 }
 .ticker-inner{display:flex;white-space:nowrap;animation:ticker 28s linear infinite}
 .ticker-inner span{font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:.8px;color:#fff;padding:0 36px;text-transform:uppercase}
@@ -54,26 +55,38 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif;line-height:1.15;color:var(--wh
   position:fixed;top:28px;left:0;right:0;z-index:1000;
   background:rgba(6,8,10,.97);border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;height:50px;backdrop-filter:blur(12px);
+  padding:0 16px;height:50px;backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
 }
-.tb-logo{display:flex;align-items:center;gap:10px}
-.tb-ec{font-size:17px}
-.tb-name{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--muted2);text-transform:uppercase}
+.tb-logo{display:flex;align-items:center;gap:8px;min-width:0;overflow:hidden}
+.tb-ec{font-size:17px;flex-shrink:0}
+.tb-name{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;
+  color:var(--muted2);text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 .tb-share{
-  display:flex;align-items:center;gap:8px;
-  background:#22c55e;color:#fff;padding:7px 16px;
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+  background:#22c55e;color:#fff;padding:7px 14px;
   font-size:11px;letter-spacing:.5px;text-transform:uppercase;
-  text-decoration:none;font-weight:600;transition:background .2s;
+  font-weight:600;transition:background .2s;
   font-family:'IBM Plex Mono',monospace;border:none;cursor:pointer;
+  white-space:nowrap;
 }
 .tb-share:hover{background:#16a34a}
+@media(max-width:600px){
+  .tb-name{font-size:10px;letter-spacing:.5px;max-width:180px}
+  .tb-share span{display:none}
+  .tb-share{padding:7px 10px}
+}
 
 /* ── HERO ── */
 #hero{
-  min-height:100vh;padding-top:78px;
+  min-height:100vh;
   background:var(--black);
   display:flex;flex-direction:column;justify-content:center;align-items:center;
-  text-align:center;padding:120px 24px 80px;
+  text-align:center;
+  padding:120px 36px 80px;
   position:relative;overflow:hidden;
 }
 .hero-grid-bg{
@@ -343,20 +356,121 @@ footer{background:var(--near-black);border-top:1px solid var(--border);padding:5
 .footer-sources{font-size:11px;color:var(--muted);line-height:2;margin-top:20px}
 .footer-line{width:36px;height:1px;background:var(--border);margin:20px auto}
 
+/* ── LAYOUT CON SIDEBAR ── */
+#app-shell{
+  display:flex;
+  min-height:100vh;
+}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  width:220px;flex-shrink:0;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  position:fixed;
+  top:78px; /* ticker 28 + topbar 50 */
+  left:0;bottom:0;
+  overflow-y:auto;
+  z-index:900;
+  display:flex;flex-direction:column;
+  padding:24px 0 32px;
+  transition:transform .3s ease;
+}
+#sidebar::-webkit-scrollbar{width:2px}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
+.sb-header{padding:0 20px 20px;border-bottom:1px solid var(--border)}
+.sb-logo-text{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--white);line-height:1.3;margin-bottom:4px}
+.sb-logo-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.sb-section-label{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+  padding:20px 20px 8px;display:block;
+}
+.sb-nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 20px;cursor:pointer;
+  transition:background .15s;border:none;background:transparent;
+  width:100%;text-align:left;
+  border-left:2px solid transparent;
+}
+.sb-nav-item:hover{background:var(--surface2);border-left-color:var(--border2)}
+.sb-nav-item.active{background:var(--surface2);border-left-color:var(--red-bright)}
+.sb-nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sb-nav-name{font-size:12px;color:var(--muted2);font-weight:500;line-height:1.3}
+.sb-nav-item.active .sb-nav-name{color:var(--white)}
+.sb-footer{margin-top:auto;padding:20px 20px 0;border-top:1px solid var(--border)}
+.sb-update{display:inline-flex;align-items:center;gap:6px;background:rgba(22,163,74,.1);color:#4ade80;border:1px solid rgba(22,163,74,.2);border-radius:20px;padding:4px 10px;font-size:10px;font-family:'IBM Plex Mono',monospace;margin-bottom:10px}
+.sb-update::before{content:'';width:5px;height:5px;border-radius:50%;background:#4ade80}
+.sb-source{font-size:10px;color:var(--muted);line-height:1.6}
+
+/* ── MAIN CONTENT ── */
+#main-content{
+  margin-left:220px;
+  width:calc(100% - 220px);
+  min-height:100vh;
+}
+
+/* ── CAROUSEL FIJO ── */
+#carousel{
+  background:var(--surface2);
+  border-bottom:1px solid var(--border);
+  padding:0;overflow:hidden;position:relative;
+  height:52px;
+}
+#carousel::before,#carousel::after{
+  content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;
+}
+#carousel::before{left:0;background:linear-gradient(to right,var(--surface2),transparent)}
+#carousel::after{right:0;background:linear-gradient(to left,var(--surface2),transparent)}
+.carousel-track{
+  display:flex;animation:ticker 40s linear infinite;
+  width:max-content;height:52px;align-items:center;
+}
+.carousel-track:hover{animation-play-state:paused}
+.c-card{
+  flex-shrink:0;
+  display:flex;align-items:center;gap:14px;
+  padding:0 28px;height:52px;
+  border-right:1px solid var(--border);
+  position:relative;
+}
+.c-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:var(--red)}
+.c-cat{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.c-num{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--white);line-height:1;margin-right:4px}
+.c-lbl{font-size:11px;color:var(--muted2);line-height:1.3;max-width:160px}
+
+/* ── SECTIONS inside main ── */
+.section{padding:60px 36px;max-width:1060px;margin:0 auto}
+.section-full{padding:60px 36px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.section-full .inner{max-width:1060px;margin:0 auto}
+
 /* ── RESPONSIVE ── */
-@media(max-width:720px){
+@media(max-width:900px){
+  #sidebar{display:none}
+  #main-content{margin-left:0;width:100%}
+  .section{padding:48px 20px}
+  .section-full{padding:48px 20px}
   .chart-grid-2,.chart-grid-3{grid-template-columns:1fr}
   .kpi-grid{grid-template-columns:1fr 1fr}
   .fmi-row{flex-wrap:wrap}
   .toc-grid{grid-template-columns:1fr 1fr}
-  .hero-kpi-strip{flex-wrap:wrap;max-width:320px}
+  .hero-kpi-strip{flex-wrap:wrap;max-width:340px}
   .hero-kpi{min-width:140px;border-bottom:1px solid var(--border2)}
   .stat-row{flex-wrap:wrap}
   .corruption-grid{grid-template-columns:1fr}
   .verdad-container{flex-direction:column}
   #sharebar{bottom:12px;right:12px}
   .share-btn span{display:none}
+  /* mobile: carousel stays fixed-looking via sticky */
+  #carousel{position:sticky;top:78px;z-index:850}
 }
+@media(max-width:480px){
+  .kpi-grid{grid-template-columns:1fr}
+  .toc-grid{grid-template-columns:1fr}
+  .hero-kpi-strip{max-width:100%}
+  .hero-kpi{min-width:0;width:50%}
+}
+
 </style>
 </head>
 <body>
@@ -370,7 +484,7 @@ footer{background:var(--near-black);border-top:1px solid var(--border);padding:5
 <div id="topbar">
   <div class="tb-logo">
     <span class="tb-ec">🇪🇨</span>
-    <span class="tb-name">Despacho · Juan Andrés González Alvear · Ecuador 2025–2029</span>
+    <span class="tb-name">Juan Andrés González Alvear · Asambleísta · Ecuador 2025–2029</span>
   </div>
   <button class="tb-share" onclick="shareWA()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.852L.073 23.927l6.292-1.438A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.652-.518-5.165-1.42l-.371-.22-3.733.853.871-3.634-.24-.381A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
@@ -390,12 +504,61 @@ footer{background:var(--near-black);border-top:1px solid var(--border);padding:5
   </button>
 </div>
 
-<!-- ═══ HERO ═══ -->
+<!-- ═══ APP SHELL ═══ -->
+<div id="app-shell">
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-header">
+    <div class="sb-logo-text">Ecuador<br>Analytics</div>
+    <div class="sb-logo-sub">Informe Real · Noboa 2026</div>
+  </div>
+  <span class="sb-section-label">Indicadores</span>
+  <button class="sb-nav-item active" onclick="smoothTo('sec-verdad');setSbActive(this)">
+    <span class="sb-nav-dot" style="background:var(--red-bright)"></span>
+    <span class="sb-nav-name">La Palabra de Noboa</span>
+  </button>
+  <button class="sb-nav-item" onclick="smoothTo('sec-resumen');setSbActive(this)">
+    <span class="sb-nav-dot" style="background:var(--gold-bright)"></span>
+    <span class="sb-nav-name">Resumen General</span>
+  </button>
+  <button class="sb-nav-item" onclick="smoothTo('sec-seguridad');setSbActive(this)">
+    <span class="sb-nav-dot" style="background:var(--red-bright)"></span>
+    <span class="sb-nav-name">Crisis de Seguridad</span>
+  </button>
+  <button class="sb-nav-item" onclick="smoothTo('sec-empleo');setSbActive(this)">
+    <span class="sb-nav-dot" style="background:#f59e0b"></span>
+    <span class="sb-nav-name">Empleo y Trabajo</span>
+  </button>
+  <button class="sb-nav-item" onclick="smoothTo('sec-inversion');setSbActive(this)">
+    <span class="sb-nav-dot" style="background:var(--red-bright)"></span>
+    <span class="sb-nav-name">Inversión Pública</span>
+  </button>
+  <button class="sb-nav-item" onclick="smoothTo('sec-deuda');setSbActive(this)">
+    <span class="sb-nav-dot" style="background:var(--gold-bright)"></span>
+    <span class="sb-nav-name">Deuda y FMI</span>
+  </button>
+  <button class="sb-nav-item" onclick="smoothTo('sec-corrupcion');setSbActive(this)">
+    <span class="sb-nav-dot" style="background:var(--red-bright)"></span>
+    <span class="sb-nav-name">Corrupción</span>
+  </button>
+  <button class="sb-nav-item" onclick="smoothTo('sec-balance');setSbActive(this)">
+    <span class="sb-nav-dot" style="background:#9ca3af"></span>
+    <span class="sb-nav-name">Balance Final</span>
+  </button>
+  <div class="sb-footer">
+    <div class="sb-update">Datos actualizados</div>
+    <div class="sb-source">Fuente: INEC · Min. Finanzas<br>FMI · Lupa Media · Policía Nacional<br>3 hojas · 134 registros</div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
 <section id="hero">
   <div class="hero-grid-bg"></div>
   <div class="hero-glow"></div>
   <div class="hero-live-badge"><div class="hero-live-dot"></div>Datos verificados · Tercer informe a la nación</div>
-  <div class="hero-eyebrow">Despacho · Juan Andrés González Alvear · Ecuador 2025–2029</div>
+  <div class="hero-eyebrow">Despacho · Juan Andrés González Alvear · Asambleísta · Ecuador 2025–2029</div>
   <h1 class="hero-title">
     Informe <span class="gold">REAL</span><br>a la Nación<br><span class="red">Noboa 2026</span>
   </h1>
@@ -408,7 +571,7 @@ footer{background:var(--near-black);border-top:1px solid var(--border);padding:5
     <div class="hero-kpi"><span class="num">$91.9B</span><span class="lbl">Deuda pública</span></div>
     <div class="hero-kpi"><span class="num"><span style="font-size:.75em;vertical-align:super;color:var(--red-bright)">+</span>10</span><span class="lbl">Casos corrupción</span></div>
   </div>
-  <div class="hero-author">Elaboración: Despacho · Juan Andrés González Alvear · Asambleísta Nacional · Ecuador 2025–2029</div>
+  <div class="hero-author">Elaboración: Despacho · Juan Andrés González Alvear · Asambleísta · Ecuador 2025–2029</div>
   <div class="hero-scroll">Scroll para explorar</div>
 </section>
 
@@ -955,7 +1118,7 @@ footer{background:var(--near-black);border-top:1px solid var(--border);padding:5
   <div class="footer-assembly">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold-bright)" stroke-width="1.5"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11M8 10v11M12 10v11M16 10v11"/></svg>
     <div class="asm-text">
-      <div class="asm-name">Elaboración: Despacho · Juan Andrés González Alvear · Asambleísta Nacional</div>
+      <div class="asm-name">Elaboración: Despacho · Juan Andrés González Alvear · Asambleísta</div>
       <div class="asm-title">Asamblea Nacional del Ecuador · Ecuador 2025–2029 · Informe de rendición de cuentas ciudadana</div>
     </div>
   </div>
@@ -976,7 +1139,7 @@ footer{background:var(--near-black);border-top:1px solid var(--border);padding:5
 // ════════════════════════════════════
 function shareWA(){
   var url=encodeURIComponent(window.location.href);
-  var msg=encodeURIComponent('Informe REAL a la Nación Noboa 2026: violencia histórica, corrupción documentada, deuda récord y mentiras verificadas. Elaboración: Despacho · Juan Andrés González Alvear · Asambleísta Nacional 🇪🇨 ');
+  var msg=encodeURIComponent('Informe REAL a la Nación Noboa 2026: violencia histórica, corrupción documentada, deuda récord y mentiras verificadas. Elaboración: Despacho · Juan Andrés González Alvear · Asambleísta 🇪🇨 ');
   window.open('https://wa.me/?text='+msg+url,'_blank');
 }
 function copyLink(){
@@ -996,6 +1159,7 @@ function copyLink(){
   });
 }
 function smoothTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function setSbActive(btn){document.querySelectorAll('.sb-nav-item').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
 
 // ════════════════════════════════════
 //  TICKER
@@ -1013,7 +1177,7 @@ function smoothTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView
     '81% de las víctimas de homicidio no tenían antecedentes penales',
     '+10 casos de posible corrupción documentados en el gobierno',
     '$3.7 mil millones del FMI en dos años y medio del gobierno de Noboa',
-    'Elaboración: Despacho · Juan Andrés González Alvear · Ecuador 2025–2029'
+    'Elaboración: Despacho · Juan Andrés González Alvear · Asambleísta · Ecuador 2025–2029'
   ];
   var html=items.map(function(t){return'<span>'+t+'</span><span class="ticker-sep">◆</span>';}).join('');
   var inner=document.getElementById('ticker-inner');
@@ -1262,6 +1426,28 @@ var TT={backgroundColor:'#161b22',borderColor:'rgba(185,28,28,.35)',borderWidth:
   var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
   document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
 })();
+
+// ── Sidebar active on scroll ──
+(function(){
+  var sections=['sec-verdad','sec-resumen','sec-seguridad','sec-empleo','sec-inversion','sec-deuda','sec-corrupcion','sec-balance'];
+  var items=document.querySelectorAll('.sb-nav-item');
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var idx=sections.indexOf(e.target.id);
+        if(idx>=0){
+          items.forEach(function(it){it.classList.remove('active');});
+          if(items[idx])items[idx].classList.add('active');
+        }
+      }
+    });
+  },{threshold:0.3});
+  sections.forEach(function(id){var el=document.getElementById(id);if(el)obs.observe(el);});
+})();
 </script>
+
+</div><!-- /main-content -->
+</div><!-- /app-shell -->
+
 </body>
 </html>
